@@ -1,4 +1,4 @@
-export const processOrderBook = (orderBook, gap) => {
+export const processOrderBook = (orderBook, gap, time) => {
   const processEntries = (entries) => {
     const groupedEntries = {};
 
@@ -14,10 +14,11 @@ export const processOrderBook = (orderBook, gap) => {
       }
     });
 
-    return Object.keys(groupedEntries).map((price) => [
-      parseFloat(price).toFixed(0),
-      groupedEntries[price].toFixed(0),
-    ]);
+    return Object.keys(groupedEntries).map((price) => ({
+      time: time,
+      price: parseFloat(price).toFixed(0),
+      value: groupedEntries[price].toFixed(0),
+    }));
   };
 
   return processEntries(orderBook.bids.concat(orderBook.asks));
