@@ -29,7 +29,7 @@ const Chart = () => {
     const marginLeft = 150;
 
     const svg = d3
-      .select("#chart")
+      .select(svgRef.current)
       .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -97,10 +97,7 @@ const Chart = () => {
     const marginRight = 30;
     const marginLeft = 150;
 
-    const svg = d3
-      .select("#chart svg")
-      .attr("width", width)
-      .attr("height", height);
+    const svg = d3.select(svgRef.current).select("svg");
 
     const chartX = d3
       .scaleBand()
@@ -258,7 +255,9 @@ const Chart = () => {
         tooltip.style("visibility", "hidden");
       });
 
-    const AxisSvg = svg.select(".axis");
+    const AxisSvg = d3.select(svgRef.current).select(".axis");
+    AxisSvg.selectAll(".color-scale-bar").remove(); // Remove existing color scale bar if any
+
     const colorScaleBar = AxisSvg.append("g").attr("class", "color-scale-bar");
 
     const colorAxisScale = d3
@@ -281,7 +280,6 @@ const Chart = () => {
       .enter()
       .append("stop")
       .attr("offset", (d) => `${d * 100}%`)
-      // .attr("offset", (d) => `${(1 - d) * 100}%`)
       .attr("stop-color", (d) =>
         colorScale((1 - d) * d3.max(heatmapData, (d) => Number(d.value)))
       );
